@@ -1,5 +1,5 @@
 import { select } from 'd3-selection';
-import { svg } from '@redsift/d3-rs-svg';
+import { html as svg } from '@redsift/d3-rs-svg';
 
 export default function text(id) {
   var classed = 'text-icon', 
@@ -7,33 +7,34 @@ export default function text(id) {
       foreground = '#FFFFFF',
       fontSize = 128,
       width = 200,
-      height = 200;
+      height = 200,
+      style = null,
+      scale = 1.0,
+      text = (d) => d;
 
   function _impl(context) {
     var selection = context.selection ? context.selection() : context,
         transition = (context.selection !== undefined);
         
-    selection.each(function(data) {
-
+    selection.each(function() {
       var node = select(this); 
+   
+      var root = svg().width(width).height(height).scale(scale).margin(0).style(style);
+      var tnode = node;
+      if (transition) {
+        tnode = node.transition(context);
+      }
+      tnode.call(root);
       
-      var elmS = node.selectAll('svg').data([ data ]);
-      elmS.exit().remove();
-      elmS = elmS.enter()
-              .append('svg')
-                .attr('width', width)
-                .attr('height', height)              
-              .merge(elmS);
+      var elmS = node.select(root.child());
       
-      
+      // data is from the upstream bind
       var elmR = elmS.selectAll('rect').data((d) => d);
       elmR.exit().remove();
       elmR = elmR.enter()
               .append('rect')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('width', width)
-                .attr('height', height)
               .merge(elmR);      
       
       var elmT = elmS.selectAll('text').data((d) => d);
@@ -44,17 +45,18 @@ export default function text(id) {
                 .attr('y', '50%')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
-                .attr('font-family', '\'Electrolize\', sans-serif')
               .merge(elmT);
-      
-      elmT.text((d) => d);
+  
+      elmT.text(text);
       
       if (transition === true) {
         elmR = elmR.transition(context);
         elmT = elmT.transition(context);
       }  
 
-      elmR.attr('fill', background);         
+      elmR.attr('fill', background)
+          .attr('width', width)
+          .attr('height', height);         
       elmT.attr('fill', foreground).attr('font-size', fontSize);  
     });
   }
@@ -88,6 +90,18 @@ export default function text(id) {
   _impl.height = function(value) {
     return arguments.length ? (height = value, _impl) : height;
   }; 
-        
+
+  _impl.scale = function(value) {
+    return arguments.length ? (scale = value, _impl) : scale;
+  }; 
+  
+  _impl.style = function(value) {
+    return arguments.length ? (style = value, _impl) : style;
+  }; 
+  
+  _impl.text = function(value) {
+    return arguments.length ? (text = value, _impl) : text;
+  }; 
+          
   return _impl;
 }

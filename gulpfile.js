@@ -28,9 +28,15 @@ if (argv.g) {
 var globalMap = {};
 globals.forEach((d) => {
     var target = 'd3';
-    if (d.indexOf('d3-rs') === 0) {
-        target = d.replace(/-/g, '_');
+    if (d.indexOf('@redsift/d3-rs') !== -1) {
+        var trim = d;
+        var paths = trim.split('/');
+        if (paths.length > 1) {
+            trim = paths.slice(1, paths.length).join('/');
+        }
+        target = trim.replace(/-/g, '_');
     }
+
     globalMap[d] = target;
 });
 
