@@ -1,5 +1,5 @@
 export var name = "@redsift/d3-rs-text-icon";
-export var version = "0.0.1";
+export var version = "0.0.2";
 export var description = "Generates a square text icon using D3v4.";
 export var keywords = ["text","redsift","d3","icon"];
 export var homepage = "https://github.com/redsift/d3-rs-text-icon";
