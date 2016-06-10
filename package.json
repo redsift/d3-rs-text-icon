@@ -29,8 +29,10 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
+    "@redsift/d3-rs-svg": "~0.2.3",
+    "@redsift/ui-rs-core": "^0.1.8",
     "d3-selection": "~0.7.2",
-    "@redsift/d3-rs-svg": "~0.2.3"   
+    "rollup-plugin-buble": "^0.10.0"
   },
   "devDependencies": {
     "@redsift/tape-reel": "~0.0.2",

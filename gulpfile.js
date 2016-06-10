@@ -5,20 +5,21 @@ var argv = require('yargs')
                 .demand(['o'])
                 .describe('o', 'Output file')
                 .argv;
-                
+
 var gulp = require('gulp');
 var del = require('del');
 var util = require('gulp-util');
-var rollup = require('rollup-stream'); 
+var rollup = require('rollup-stream');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
-var babel = require('rollup-plugin-babel');
+// var babel = require('rollup-plugin-babel');
+var buble = require('rollup-plugin-buble');
 var includes = require('rollup-plugin-includepaths');
+var nodeResolve = require('rollup-plugin-node-resolve');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var rename = require('gulp-rename');
-
 
 var outputFilename = argv.o;
 var globals = [];
@@ -42,16 +43,24 @@ globals.forEach((d) => {
 
 var task = {};
 
-gulp.task('clean', () => del([ 'distribution/**' ]));  
+gulp.task('clean', () => del([ 'distribution/**' ]));
 
-gulp.task('umd', task.umd = () => {  
+gulp.task('umd', task.umd = () => {
   return rollup({
             moduleName: outputFilename.replace(/-/g, '_'),
             globals: globalMap,
             entry: './index.js',
             format: 'umd',
             sourceMap: true,
-            plugins: [ includes({ paths: [ 'src/' ] }), babel() ]
+            plugins: [
+              includes({ paths: [ 'src/' ] }),
+              nodeResolve({
+                jsnext: true,
+                main: true,
+                skip: globals
+              }),
+              buble()
+            ]
         })
         .pipe(source('main.js', './src'))
         .pipe(buffer())
