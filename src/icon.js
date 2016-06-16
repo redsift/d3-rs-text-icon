@@ -1,27 +1,44 @@
 import { select } from 'd3-selection';
 import { html as svg } from '@redsift/d3-rs-svg';
 
+import { 
+  random as random, 
+  contrasts as contrasts, 
+  presentation10 as presentation10,
+  display as display
+} from '@redsift/d3-rs-theme';
+
+const DEFAULT_SIZE = 256;
+const DEFAULT_FONT = 200;
+
+function sizeFor(val) {
+  return Math.round((DEFAULT_FONT / DEFAULT_SIZE ) * val);  
+}
+
 export default function text(id) {
   var classed = 'text-icon', 
-      background = '#000000',
-      foreground = '#FFFFFF',
-      fontSize = 128,
-      width = 200,
-      height = 200,
-      style = null,
+      background = null,
+      foreground = null,
+      fontSize = DEFAULT_FONT,
+      width = DEFAULT_SIZE,
+      height = null,
+      style = "@import url(http://fonts.googleapis.com/css?family=Electrolize); text{ font-family: Electrolize }",
       scale = 1.0,
       text = (d) => d;
-
+  
+  let colors = random(presentation10.standard.filter((e, i) => i !== presentation10.names.grey));
+  
   function _impl(context) {
     var selection = context.selection ? context.selection() : context,
         transition = (context.selection !== undefined);
-        
+            
     selection.each(function() {
-      var node = select(this); 
+      var node = select(this);  
+      var h = height || width;
    
-      var root = svg().width(width).height(height).scale(scale).margin(0).style(style);
+      var root = svg(id).width(width).height(h).scale(scale).margin(0).style(style);
       var tnode = node;
-      if (transition) {
+      if (transition === true) {
         tnode = node.transition(context);
       }
       tnode.call(root);
@@ -54,10 +71,17 @@ export default function text(id) {
         elmT = elmT.transition(context);
       }  
 
-      elmR.attr('fill', background)
+       elmR.attr('fill', (d) => background || colors(d))
           .attr('width', width)
-          .attr('height', height);         
-      elmT.attr('fill', foreground).attr('font-size', fontSize);  
+          .attr('height', h);      
+             
+      elmT.attr('fill', (d) => {
+            if (foreground != null) return foreground;
+            if (background != null) return contrasts.white(background) ? display.text.white : display.text.black;
+            
+            return contrasts.white(colors(d)) ? display.text.white : display.text.black;
+          })
+          .attr('font-size', fontSize);  
     });
   }
   
@@ -82,11 +106,15 @@ export default function text(id) {
   _impl.fontSize = function(value) {
     return arguments.length ? (fontSize = value, _impl) : fontSize;
   };
-  
+
+  _impl.size = function(value) {
+    return arguments.length ? (width = value, height = value, fontSize = sizeFor(value) , _impl) : width;
+  };
+    
   _impl.width = function(value) {
     return arguments.length ? (width = value, _impl) : width;
   };  
-  
+
   _impl.height = function(value) {
     return arguments.length ? (height = value, _impl) : height;
   }; 
