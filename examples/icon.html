@@ -18,14 +18,14 @@
       <div></div>
       <div></div>            
     </div>
-        
-    <script src="https://d3js.org/d3.v4.0.0-alpha.35.min.js"></script>
-    <script src="//static.redsift.io/reusable/d3-rs-svg/latest/d3-rs-svg.umd-es2015.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.0.0-alpha.49.js"></script>
     <script src="/d3-rs-text-icon.umd-es2015.min.js"></script>
+
     <script>
 
     'use strict';
-    var labels = [ ['A1'], 'B', 'C'];
+    var labels = [ ['A1'], '0\\', 'C'];
     
     var text = d3_rs_text_icon.html().style('@import url(http://fonts.googleapis.com/css?family=Electrolize); text{ font-family: Electrolize }');
     var textElm = d3.select('#elm').selectAll('div').data(labels).call(text);
