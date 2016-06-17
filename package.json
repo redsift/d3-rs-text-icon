@@ -1,6 +1,6 @@
 {
   "name": "@redsift/d3-rs-text-icon",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Generates a square text icon using D3v4.",
   "keywords": [
     "text",

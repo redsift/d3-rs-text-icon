@@ -22,7 +22,7 @@ export default function text(id) {
       fontSize = DEFAULT_FONT,
       width = DEFAULT_SIZE,
       height = null,
-      style = "@import url(http://fonts.googleapis.com/css?family=Electrolize); text{ font-family: Electrolize }",
+      style = "@import url(https://fonts.googleapis.com/css?family=Electrolize); text{ font-family: Electrolize }",
       scale = 1.0,
       text = (d) => d;
   
