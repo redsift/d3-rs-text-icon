@@ -1,11 +1,12 @@
 export var name = "@redsift/d3-rs-text-icon";
-export var version = "0.0.3";
+export var version = "0.0.4";
 export var description = "Generates a square text icon using D3v4.";
 export var keywords = ["text","redsift","d3","icon"];
 export var homepage = "https://github.com/redsift/d3-rs-text-icon";
 export var license = "MIT";
 export var author = {"name":"Rahul Powar","url":"https://medium.com/@rahulpowar"};
-export var main = "distribution/d3-rs-text-icon.umd-es2015.min.js";
+export var main = "distribution/d3-rs-text-icon.umd-es2015.js";
+export var browser = "distribution/d3-rs-text-icon.umd-es2015.min.js";
 export var repository = {"type":"git","url":"https://github.com/redsift/d3-rs-text-icon.git"};
 export var scripts = {"serve":"gulp -o d3-rs-text-icon -g d3-selection serve","build":"gulp -o d3-rs-text-icon -g d3-selection build","pretest":"npm outdated && npm run version && npm run build","test":"tape 'test/**/*-test.js' && eslint index.js src","version":"json2module package.json > package.js","prepublish":"npm run version && npm run build"};
 export var dependencies = {"d3-selection":"~0.9.0","@redsift/d3-rs-svg":"~0.2.3","@redsift/d3-rs-theme":"~0.0.1"};

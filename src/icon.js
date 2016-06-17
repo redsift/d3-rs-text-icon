@@ -46,7 +46,7 @@ export default function text(id) {
       var elmS = node.select(root.child());
       
       // data is from the upstream bind
-      var elmR = elmS.selectAll('rect').data((d) => d);
+      var elmR = elmS.selectAll('rect').data((d) => (d == null) ? [ '' ] : d); // rect on no data
       elmR.exit().remove();
       elmR = elmR.enter()
               .append('rect')
@@ -54,7 +54,7 @@ export default function text(id) {
                 .attr('y', 0)
               .merge(elmR);      
       
-      var elmT = elmS.selectAll('text').data((d) => d);
+      var elmT = elmS.selectAll('text').data((d) => (d == null) ? [] : d); // no text on no data
       elmT.exit().remove();
       elmT = elmT.enter()
               .append('text')
